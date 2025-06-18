@@ -27,9 +27,9 @@ boss_bg_imgs = [
 for i in range(len(boss_bg_imgs)):
     boss_bg_imgs[i] = pygame.transform.scale(boss_bg_imgs[i], (WIDTH, HEIGHT))
 
-# Imagens dos personagens
+# --- Ajuste o tamanho das imagens dos bosses e do player ---
 player_img = pygame.image.load("imagens/player.png")
-player_img = pygame.transform.scale(player_img, (300, 300))  # novo tamanho desejado
+player_img = pygame.transform.scale(player_img, (450, 450))  # tamanho maior
 
 boss_imgs = [
     pygame.image.load("imagens/repetente.png"),
@@ -37,9 +37,23 @@ boss_imgs = [
     pygame.image.load("imagens/boss3.png"),
 ]
 
-boss_imgs[0] = pygame.transform.scale(boss_imgs[0], (300, 320))
-boss_imgs[1] = pygame.transform.scale(boss_imgs[1], (300, 320))
-boss_imgs[2] = pygame.transform.scale(boss_imgs[2], (300, 400))  # novo tamanho desejado
+boss_imgs[0] = pygame.transform.scale(boss_imgs[0], (400, 500))  # tamanho maior
+boss_imgs[1] = pygame.transform.scale(boss_imgs[1], (600, 700))  # tamanho maior
+boss_imgs[2] = pygame.transform.scale(boss_imgs[2], (600, 800))  # tamanho maior
+
+# Imagens dos personagens
+player_img = pygame.image.load("imagens/player.png")
+player_img = pygame.transform.scale(player_img, (500, 500))  # novo tamanho desejado
+
+boss_imgs = [
+    pygame.image.load("imagens/repetente.png"),
+    pygame.image.load("imagens/celso_russomano.png"),
+    pygame.image.load("imagens/boss3.png"),
+]
+
+boss_imgs[0] = pygame.transform.scale(boss_imgs[0], (400, 500))
+boss_imgs[1] = pygame.transform.scale(boss_imgs[1], (600, 700))
+boss_imgs[2] = pygame.transform.scale(boss_imgs[2], (600, 800))  # novo tamanho desejado
 
 boss_explain_texts = [" Maxuelison Kleber Whellingthon. Um estudante do 9 ano do ensino fundamental com apenas 13 anos; de febem . Tendo reprovado 15 vezes, diz que “já viu professor nascer e se aposentar”.  Devido a sua carreira notável em sua série, criou autoridade maior que a do próprio diretor em sala de aula. Carregando um baralho espanhol,um narguilé montado em sua mochila e um jack daniels Tennessee Whiskey 700ml, pode causar  o terror em qualquer um que ousar cruzar o seu caminho.",
                       "Celso muçulmano é um advogado que jamais diz algo simples. Suas frases são construídas com mais de 50 palavras, cheias de subordinações, inversões e adjetivos extravagantes — e ele nunca para para respirar. “Excelentíssimos presentes nesta augusta assembléia, venho, por meio desta humilde e respeitosa manifestação, pleitear a vossa compreensão acerca do que, in casu, se configura como a mais complexa das estruturas sintáticas compostas, a qual, por óbvio, exige análise detida e criteriosa.” Ele se move lentamente, e lança palavras tão complexas que podem paralisar o jogador só de ouvir.",
@@ -131,7 +145,9 @@ bosses = [
             {"name": "Aula Cancelada (Mas o Dano Fica)", "effect": "Ivela começa uma greve, causando a parada dos estudos gramaticais", "special": None}
         ],
         "player_attacks": [
-            {"name": "O Anti-Professor",  "effect": "Jogador pode spawnar o Guilherme, que atrapalha a aula de Ivelã com comentários desnecessários como 'O bullying já emagreceu muita gente ' ou ' Acho que não precisa de redação nesse semestre', fazendo a professora se distrair", "special": "conditional_half"},
+            {"name": "O Anti-Professor",
+             "effect": "Jogador pode spawnar o Guilherme, que atrapalha a aula de Ivelã com comentários desnecessários como'O bullying já emagreceu muita gente' fazendo a professora se distrair",
+             "special": "conditional_half"},
             {"name": "HMMMMMm cafézinho",  "effect": "Jogador vai fazer café no meio da aula da Ivelã, causando agonia extrema no boss.", "special": "heal_50"},
             {"name": "Lava Educação",  "effect": "Jogador se torna um político renomado e desvia verba da educação, atrasando o seu salário, causando desestabilidade na professora.", "special": None},
             {"name": "Aula dos Porquês",  "effect": " Jogador sobrecarrega Ivelã com perguntas extremamente óbvias sobre gramática, causando um burnout na professora.", "special": None},
@@ -367,6 +383,9 @@ def draw_button(text, x, y, width, height, color, hover_color):
     draw_text_with_paper(text, font_medium, BLACK, x + width//2, y + height//2, True)
     return clicked
 
+noslen1 = pygame.image.load("imagens/noslen1.png")
+foto = pygame.transform.scale(noslen1, (300,320))
+
 def draw_button_with_image(text, x, y, width, height, image, hover_color):
     mouse_pos = pygame.mouse.get_pos()
     clicked = False
@@ -422,31 +441,34 @@ def draw_battle_screen():
             return ("victory", 0)
 
     # --- Ataques do turno (meio da tela) ---
-  
-
     # Descrição do ataque baseado no dado (centralizada e fonte maior)
     if attack_description:
         center_y = HEIGHT // 2
+        # Cor do texto: preto para boss 0 e 2, branco para boss 1
+        if current_boss in [0, 2]:
+            desc_color = BLACK
+        else:
+            desc_color = WHITE
         draw_text(f"Resultado do dado: {dice_roll}", font_large, YELLOW, WIDTH//2, center_y - 30, True)
-        draw_text(attack_description, font_large, WHITE, WIDTH//2, center_y + 20, True)
+        draw_text(attack_description, font_large, desc_color, WIDTH//2, center_y + 20, True)
         y_offset += 60
 
     # --- Infos e lifebar na parte de baixo ---
     bottom_y = HEIGHT - 80
 
     # Desenha imagem do player acima da barra de vida
-    screen.blit(player_img, (-50, bottom_y - player_img.get_height() - 10))
+    screen.blit(player_img, (-80, bottom_y - player_img.get_height() - 30))
 
     # Jogador (esquerda)
     draw_text(f"João Carbonari", font_medium, WHITE, 10, bottom_y)
-    draw_hp_bar(player_hp, 200, 10, bottom_y + 30, 200, 20, GREEN)
-    draw_text(f"Vida: {player_hp}/200", font_small, WHITE, 50, bottom_y + 55)
+    draw_hp_bar(player_hp, 200, 10, bottom_y + 30, 350, 30, GREEN)
+    draw_text(f"Vida: {player_hp}/200", font_small, WHITE, 80, bottom_y + 65)
 
     # --- POSIÇÕES INDIVIDUAIS DOS BOSSES ---
     boss_positions = [
-        (WIDTH - 280, bottom_y - boss_imgs[0].get_height() - 30),  # Boss 0
-        (WIDTH - 280, bottom_y - boss_imgs[1].get_height() - 30),  # Boss 1
-        (WIDTH - 260, bottom_y - boss_imgs[2].get_height() - 20),  # Boss 2
+        (WIDTH - 450, bottom_y - boss_imgs[0].get_height() - 50),  # Boss 0
+        (WIDTH - 530, bottom_y - boss_imgs[1].get_height() - 50),  # Boss 1
+        (WIDTH - 500, bottom_y - boss_imgs[2].get_height() - 50),  # Boss 2
     ]
     boss_x, boss_y = boss_positions[current_boss]
     screen.blit(boss_imgs[current_boss], (boss_x, boss_y))
@@ -454,8 +476,8 @@ def draw_battle_screen():
     # Boss (direita)
     boss = bosses[current_boss]
     draw_text(f"{boss['name']}", font_medium, RED, WIDTH - 250, bottom_y)
-    draw_hp_bar(boss["hp"], boss["max_hp"], WIDTH - 250, bottom_y + 30, 200, 20, RED)
-    draw_text(f"Vida: {boss['hp']}/{boss['max_hp']}", font_small, WHITE, WIDTH - 250, bottom_y + 55)
+    draw_hp_bar(boss["hp"], boss["max_hp"], WIDTH - 400, bottom_y + 30, 350, 30, RED)
+    draw_text(f"Vida: {boss['hp']}/{boss['max_hp']}", font_small, WHITE, WIDTH - 320, bottom_y + 65)
 
     # Exibe o resultado do último ataque no centro da tela, se houver
     if last_result is not None:
@@ -463,7 +485,9 @@ def draw_battle_screen():
         color = GREEN if last_result == "acertou" else RED
         draw_text(msg, font_large, color, WIDTH//2, HEIGHT//2 - 60, True)
         draw_text(f"Ataque: {last_attack_name}", font_large, YELLOW, WIDTH//2, HEIGHT//2, True)
-        draw_text(last_attack_effect, font_medium, WHITE, WIDTH//2, HEIGHT//2 + 50, True)
+        # Fonte preta para boss 0 e 2, branca para boss 1
+        efeito_cor = BLACK if current_boss in [0, 2] else WHITE
+        draw_text(last_attack_effect, font_medium, efeito_cor, WIDTH//2, HEIGHT//2 + 50, True)
 
     return None
 
@@ -572,8 +596,9 @@ def draw_victory_screen():
 def draw_game_over_screen():
     screen.fill(BLACK)
     
-    draw_text("GAME OVER", font_title, RED, WIDTH//2, 100, True)
-    draw_text("Você não conseguiu derrotar todos os bosses...", font_medium, WHITE, WIDTH//2, 180, True)
+    # Centraliza o título
+    draw_text("GAME OVER", font_title, RED, WIDTH//2, 120, True)
+    draw_text("Você não conseguiu derrotar todos os bosses...", font_medium, WHITE, WIDTH//2, 200, True)
     
     if wrong_answers >= 3:
         ending = [
@@ -591,11 +616,15 @@ def draw_game_over_screen():
             "para se sentir brevemente superior e suprir seu vazio interno."
         ]
     
-    y_offset = 240
+    # Centraliza verticalmente o bloco de texto
+    line_height = 40
+    total_height = len(ending) * line_height
+    y_offset = HEIGHT // 2 - total_height // 2
+
     for line in ending:
         draw_text(line, font_small, WHITE, WIDTH//2, y_offset, True)
-        y_offset += 30
-    
+        y_offset += line_height
+
     if draw_button("TENTAR NOVAMENTE", WIDTH//2 - 150, HEIGHT - 100, 300, 50, GREEN, (0, 200, 0)):
         reset_game()
         return True
@@ -616,6 +645,9 @@ def draw_ending_screen():
             "precisando se humilhar com gracinhas nos vídeos",
             "para entreter alunos com TDAH e criar engajamento."
         ]
+        # Mostra a imagem só se ela foi carregada corretamente
+        if noslen1.get_width() > 1:
+            screen.blit(noslen1, (WIDTH - 700, 200))
     elif player_hp >= 75:
         draw_text("FINAL MEDIANO: PROFESSOR", font_title, YELLOW, WIDTH//2, 100, True)
         ending_text = [
@@ -790,7 +822,7 @@ def draw_context_screen():
 def draw_context_boss(bossn):
     global mouse_released
     screen.blit(boss_bg_imgs[bossn], (0, 0))
-    textos_dos_bosses = ["Você acorda sem muito saber o que aconteceu, olha ao redor e percebe que está em uma sala de aula comum, você olha para o quadro e percebe que o conteúdo de substantivos está sendo passado, o que torna impossível reconhecer se você está na sexta série ou no terceirão. Pouco tempo se passa até que alguém entra pela porta, um homem visivelmente mais velho que todos os alunos daquela classe, ele imediatamente começa a lhe encarar, uma aura começa a crescer ao redor dele(igual a dos dragões heroicos do dragon city), você percebe que ele é o primeiro boss e a batalha começa.","Você acorda com as mãos atrás das costas e algemado, dois homens altos e uniformizados estão te acompanhando ao seu lado, você está no que parece ser uma casa chique e antiga, com decorações e entalhes de madeira envernizada na parede, você se pergunta aonde estão te levando, vocês param em frente a uma grande porta de madeira, que se abre sozinha, revelando um grande salão, você analisa o local por alguns segundos e percebe que está em um júri, e que o réu é você. Logo ao entrar você percebe alguém que se destaca em meio a todos os outros, um advogado, de terno e com cabelo alisado. Pouco depois esse homem aponta para você se e percebe que ele é o segundo boss. Uma aura (igual a de super sayajin) cresce ao redor dele e a segunda batalha começa.","Voce acorda novamente, desta vez em uma cadeira extremamente desconfortável, na sua frente uma mesa inclinada -“Quem foi o idiota que fez uma mesa inclinada?” você se pergunta. Olha ao seu redor e percebe que está totalmente sozinho em uma sala de aula do IFSC, com somente a sua carteira. Na sua frente, você vê um papel com o título “Recuperação de Portugues”. “O que está acontecendo?” Você se pergunta, mas antes mesmo de poder fazer hipóteses uma professora entra pela porta da sala, nada mais nada menos que Ivelã Pereira.Ivela para na sua frente e uma aura igual a de Michael Jordan cresce ao redor dela, a batalha final começa."]
+    textos_dos_bosses = ["Você acorda sem muito saber o que aconteceu, olha ao redor e percebe que está em uma sala de aula comum, você olha para o quadro e percebe que o conteúdo de substantivos está sendo passado, o que torna impossível reconhecer se você está na sexta série ou no terceirão. Pouco tempo se passa até que alguém entra pela porta, um homem visivelmente mais velho que todos os alunos daquela classe, ele imediatamente começa a lhe encarar, uma aura começa a crescer ao redor dele(igual a dos dragões heroicos do dragon city), você percebe que ele é o primeiro boss e a batalha começa.","Você acorda com as mãos atrás das costas e algemado, dois homens altos e uniformizados estão te acompanhando ao seu lado, você está no que parece ser uma casa chique e antiga, com decorações e entalhes de madeira envernizada na parede, você se pergunta aonde estão te levando, vocês param em frente a uma grande porta de madeira, que se abre sozinha, revelando um grande salão, você analisa o local por alguns segundos e percebe que está em um júri, e que o réu é você. Logo ao entrar você percebe alguém que se destaca em meio a todos os outros, um advogado, de terno e com cabelo alisado. Pouco depois esse homem aponta para você se e percebe que ele é o segundo boss. Uma aura (igual a de super sayajin) cresce ao redor dele e a segunda batalha começa.","Voce acorda novamente, desta vez em uma cadeira extremamente desconfortável, na sua frente uma mesa inclinada -“Quem foi o idiota que fez uma mesa inclinada?” você se pergunta. Olha ao seu redor e percebe que está totalmente sozinho em uma sala de aula do IFSC, com somente a sua carteira. Na sua frente, você vê um papel com o título “Recuperação de Portugues”. “O que está acontecendo?” Você se pergunta, mas antes mesmo de poder fazer hipóteses uma professora entra pela porta da sala, nada mais nada menos que Ivelã Pereira.Ivela para na sua frente e a batalha final começa."]
     texto = textos_dos_bosses[bossn]
 
     # Quebra o texto em várias linhas se for muito longo
@@ -832,6 +864,7 @@ def draw_boss_explain_screen(bossn):
     screen.blit(boss_bg_imgs[bossn], (0, 0))
     boss = bosses[bossn]
     desc = boss_explain_texts[bossn]
+
     # Quebra a descrição em linhas menores se necessário
     def wrap_text(text, font, max_width):
         words = text.split(' ')
@@ -846,12 +879,24 @@ def draw_boss_explain_screen(bossn):
                 current_line = test_line
         lines.append(current_line)
         return lines
-    lines = wrap_text(desc, font_medium, 900)
+
+    lines = wrap_text(desc, font_medium, 700)
     y = HEIGHT // 2 - (len(lines) * 20)
-    draw_text_with_paper(f"Boss: {boss['name']}", font_large, RED, WIDTH//2, y - 60, True)
+
+    # Desenha o texto à esquerda e a imagem do boss à direita (apenas para os 2 primeiros bosses)
+    text_x = WIDTH // 2 - 200
+    img_x = WIDTH // 2 + 300
+    img_y = y - 40
+
+    draw_text_with_paper(f"Boss: {boss['name']}", font_large, RED, text_x, y - 60, True)
     for line in lines:
-        draw_text_with_paper(line.strip(), font_medium, BLACK, WIDTH//2, y, True)
+        draw_text_with_paper(line.strip(), font_medium, BLACK, text_x, y, True)
         y += 40
+
+    if bossn in [0, 1]:
+        # Ajuste o tamanho da imagem se necessário
+        boss_img = boss_imgs[bossn]
+        screen.blit(boss_img, (img_x, img_y))
 
     # Botão para continuar
     clicked = draw_button("COMEÇAR BATALHA", WIDTH//2 - 150, HEIGHT - 100, 300, 50, GREEN, (0, 200, 0))
