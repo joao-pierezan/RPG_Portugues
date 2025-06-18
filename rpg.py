@@ -40,6 +40,14 @@ boss_imgs = [
 boss_imgs[0] = pygame.transform.scale(boss_imgs[0], (300, 320))
 boss_imgs[1] = pygame.transform.scale(boss_imgs[1], (300, 320))
 boss_imgs[2] = pygame.transform.scale(boss_imgs[2], (300, 400))  # novo tamanho desejado
+
+boss_explain_texts = [" Maxuelison Kleber Whellingthon. Um estudante do 9 ano do ensino fundamental com apenas 13 anos; de febem . Tendo reprovado 15 vezes, diz que “já viu professor nascer e se aposentar”.  Devido a sua carreira notável em sua série, criou autoridade maior que a do próprio diretor em sala de aula. Carregando um baralho espanhol,um narguilé montado em sua mochila e um jack daniels Tennessee Whiskey 700ml, pode causar  o terror em qualquer um que ousar cruzar o seu caminho.",
+                      "Celso muçulmano é um advogado que jamais diz algo simples. Suas frases são construídas com mais de 50 palavras, cheias de subordinações, inversões e adjetivos extravagantes — e ele nunca para para respirar. “Excelentíssimos presentes nesta augusta assembléia, venho, por meio desta humilde e respeitosa manifestação, pleitear a vossa compreensão acerca do que, in casu, se configura como a mais complexa das estruturas sintáticas compostas, a qual, por óbvio, exige análise detida e criteriosa.” Ele se move lentamente, e lança palavras tão complexas que podem paralisar o jogador só de ouvir.",
+                      ]
+
+folha_img = pygame.image.load("imagens/folha.png")
+folha_img = pygame.transform.scale(folha_img, (300, 50))  # ajuste para o tamanho do botão
+
 # Cores
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -69,63 +77,71 @@ boss_attacks_this_turn = []
 player_attacks_this_turn = []
 context_paragraph = 0
 mouse_released = True
+last_result = None  # "acertou" ou "errou"
+last_attack_name = ""
+last_attack_effect = ""
+
 
 # Dados dos bosses
 bosses = [
     {
         "name": "Repetente do Fundão",
         "hp": 100,
+        "max_hp": 100,
         "description": "Maxuelison Kleber Whellingthon. Um estudante do 9 ano com 13 anos da FEBEM. Repetente 15 vezes, carrega baralho, narguilé e whiskey.",
         "attacks": [
-            {"name": "Ataque Surpresa", "damage": 15, "effect": "Joga bolinha de papel", "special": None},
-            {"name": "Fumaça Neblinosa", "damage": 0, "effect": "Alternativas ilegíveis na próxima pergunta", "special": "no_alternatives"},
-            {"name": "JBL com Funk", "damage": 0, "effect": "Não ouve a próxima pergunta", "special": "no_sound"},
-            {"name": "Interrupção do Fundão", "damage": 10, "effect": "Distrai com perguntas aleatórias", "special": None}
+            {"name": "Ataque Surpresa",  "effect": "Boss joga uma bolinha de papel com toda força no jogador de forma sorrateira", "special": None},
+            {"name": "Fumaça Neblinosa",  "effect": "A fumaça do narguilé causa neblina na sala, impedindo o jogador de prever o ataque", "special": None},
+            {"name": "JBL com Funk",  "effect": "O repetente puxa de sua mochila uma jbl com MC Oruam com volume estourado, deixando o jogador surdo.", "special": None},
+            {"name": "Interrupção do Fundão", "effect": "Repetente grita 'Fessôra!, fala peixe, bola, gato bem rápido em inglês no meio do turno,fazendo o jogador se distrair'", "special": None}
         ],
         "player_attacks": [
-            {"name": "Mostra Carteira de Trabalho", "damage": 0, "effect": "Boss perde o turno", "special": "extra_turn"},
-            {"name": "Chama Guarda Municipal", "damage": 30, "effect": "Recupera 40 de vida", "special": "heal_40"},
-            {"name": "Apaga Carvão do Narguilé", "damage": 30, "effect": "Causa ansiedade no boss", "special": None}
+            {"name": "Trauma CLT",  "effect": "ogador mostra uma carteira de trabalho, causando um susto imensurável no boss", "special": "extra_turn"},
+            {"name": "Operação Silêncio Suspeito",  "effect": "O jogador chama a guarda municipal, que enquadra o Repetente e apreende sua cg 125 com escapamento fuelTech 450, extremamente barulhento, deixando o boss deprimido", "special": None},
+            {"name": "Fumace Interrompida",  "effect": "O jogador apaga o carvão do narguilé do Repetente, causando ansiedade no repetente que não poderá alimentar o seu vício em nicotina até chegar em casa", "special": None}
         ]
     },
     {
         "name": "Advogado Rebuscado",
         "hp": 150,
-        "description": "Dr. Fran, advogado que nunca diz algo simples. Frases com 50+ palavras, subordinações e adjetivos extravagantes.",
+        "max_hp": 150,
+        "description": "Celso Muçulmano, advogado que nunca diz algo simples. Frases com 50+ palavras, subordinações e adjetivos extravagantes.",
         "attacks": [
-            {"name": "Processo Surpresa", "damage": 10, "effect": "Processa por injúria", "special": None},
-            {"name": "Foi sem querer, querendo", "damage": 25, "effect": "Atropela com BMW X5", "special": None},
-            {"name": "Citação Infinda", "damage": 0, "effect": "Reduz seu ataque pela metade", "special": "half_attack"},
+            {"name": "Processo Surpresa", "effect": "-“É bom você medir esse seu tom pra falar comigo, por algum acaso você sabe quem você tá falando?”. O advogado processa o jogador por crime de injúria. ", "special": None},
+            {"name": "Foi sem querer, querendo", "effect": "Advogado atropela o jogador com sua Porsche Cayenne", "special": None},
+            {"name": "Citação Infinda", "effect": "Advogado recita trechos da constituição de 1998, causando exaustão no player.", "special": "half_attack"},
         ],
         "player_attacks": [
-            {"name": "Obriga ser advogado do Léo Lins", "damage": 0, "effect": "Boss não ataca por 1 turno", "special": "skip_turn"},
-            {"name": "Doutor só com doutorado", "damage": 0, "effect": "Ataque do boss reduzido se errar", "special": "conditional_half"},
-            {"name": "Acusa de suborno", "damage": 0, "effect": "Recupera 30 de vida", "special": "heal_30"},
-            {"name": "Coloca Monark pra discutir", "damage": 20, "effect": "Dano adicional", "special": None}
+            {"name": "Defesa Indesejada",  "effect": "Jogador obriga o boss a ser advogado do léo lins", "special": "skip_turn"},
+            {"name": "Desdoutorização",  "effect": "Jogador argumenta que só é doutor quem tem doutorado", "special": "conditional_half"},
+            {"name": "Operação Lava Toga",  "effect": "Jogador acusa o advogado de subornar o Juiz, levando os dois para a cadeia", "special": None},
+            {"name": "Caos no Tribunal da Internet", "effect": "Jogador coloca o monark pra discutir com o advogado sobre liberdade de expressão, causando angústia no boss", "special": None}
         ]
     },
     {
         "name": "Ivelã Pereira",
         "hp": 200,
+        "max_hp": 200,
         "description": "Doutora em Linguística, professora do IFSC. Especialista em fazer alunos sofrerem com gramática.",
         "attacks": [
-            {"name": "Traduzir frase em inglês", "damage": 20, "effect": "Dano adicional", "special": None},
-            {"name": "Documentário chato", "damage": 0, "effect": "Perde próximo turno", "special": "skip_turn"},
-            {"name": "Advertência por gírias", "damage": 10, "effect": "Dano adicional", "special": None},
-            {"name": "Suspensão", "damage": 999, "effect": "FIM DE JOGO", "special": "instant_kill"},
-            {"name": "Greve", "damage": 0, "effect": "Sem alternativas na próxima", "special": "no_alternatives"}
+            {"name": "Tradução ou Morte", "effect": "Ivela pede para o jogador traduzir uma frase aleatória em inglês, que se desestabiliza", "special": None},
+            {"name": "Sono Antipedagógico", "effect": "Ivela coloca um documentário longo e chato sobre indígenas da floresta amazônica, que faz o player adormecer.", "special": None},
+            {"name": "Redação Criminal", "effect": "Ivela dá uma advertência no aluno por usar gírias na redação", "special": None},
+            {"name": "Expulsão por Motivos Desconhecidos", "effect": "Ivelã da uma suspensão no aluno por algo extremamente horrível que não pode ser citado", "special": None},
+            {"name": "Aula Cancelada (Mas o Dano Fica)", "effect": "Ivela começa uma greve, causando a parada dos estudos gramaticais", "special": None}
         ],
         "player_attacks": [
-            {"name": "Spawna Guilherme", "damage": 0, "effect": "Ataque do boss reduzido se errar", "special": "conditional_half"},
-            {"name": "Faz café", "damage": 0, "effect": "Recupera 50 de vida", "special": "heal_50"},
-            {"name": "Vira político", "damage": 10, "effect": "Dano adicional", "special": None},
-            {"name": "Sobrecarrega com perguntas", "damage": 25, "effect": "Burnout na professora", "special": None},
-            {"name": "Responde 'Presunto'", "damage": 15, "effect": "Confusão na chamada", "special": None},
-            {"name": "Spawna candidatos do Gariba", "damage": 0, "effect": "Perde 20 minutos de aula", "special": "skip_if_wrong"}
+            {"name": "O Anti-Professor",  "effect": "Jogador pode spawnar o Guilherme, que atrapalha a aula de Ivelã com comentários desnecessários como 'O bullying já emagreceu muita gente ' ou ' Acho que não precisa de redação nesse semestre', fazendo a professora se distrair", "special": "conditional_half"},
+            {"name": "HMMMMMm cafézinho",  "effect": "Jogador vai fazer café no meio da aula da Ivelã, causando agonia extrema no boss.", "special": "heal_50"},
+            {"name": "Lava Educação",  "effect": "Jogador se torna um político renomado e desvia verba da educação, atrasando o seu salário, causando desestabilidade na professora.", "special": None},
+            {"name": "Aula dos Porquês",  "effect": " Jogador sobrecarrega Ivelã com perguntas extremamente óbvias sobre gramática, causando um burnout na professora.", "special": None},
+            {"name": "Piadocas",  "effect": "Jogador responde 'Presunto' no lugar de presente na chamada da professora", "special": None},
+            {"name": "Intervalo Comercial",  "effect": "Jogador spawna os candidatos eleitorais do gariba, fazendo com que 20 minutos da preciosa aula de ivelã sejam perdidas. ", "special": None}
         ]
     }
 ]
-
+boss_attack_indices = [0 for _ in bosses]
+player_attack_indices = [0 for _ in bosses]
 # Perguntas do jogo (período composto)
 questions = [
     # Fácil damage 15
@@ -342,14 +358,36 @@ def draw_text(text, font, color, x, y, centered=False):
 def draw_button(text, x, y, width, height, color, hover_color):
     mouse_pos = pygame.mouse.get_pos()
     clicked = False
-    
+
+    # Não desenha mais nenhum retângulo, só detecta hover/click
     if x <= mouse_pos[0] <= x + width and y <= mouse_pos[1] <= y + height:
-        pygame.draw.rect(screen, hover_color, (x, y, width, height))
         if pygame.mouse.get_pressed()[0]:
             clicked = True
-    else:
-        pygame.draw.rect(screen, color, (x, y, width, height))
-    
+
+    draw_text_with_paper(text, font_medium, BLACK, x + width//2, y + height//2, True)
+    return clicked
+
+def draw_button_with_image(text, x, y, width, height, image, hover_color):
+    mouse_pos = pygame.mouse.get_pos()
+    clicked = False
+
+    # Desenha a imagem de fundo do botão
+    screen.blit(image, (x, y))
+
+    # Remova o efeito de hover:
+    # if x <= mouse_pos[0] <= x + width and y <= mouse_pos[1] <= y + height:
+    #     hover_surface = pygame.Surface((width, height), pygame.SRCALPHA)
+    #     hover_surface.fill((*hover_color, 80))  # 80 = transparência
+    #     screen.blit(hover_surface, (x, y))
+    #     if pygame.mouse.get_pressed()[0]:
+    #         clicked = True
+
+    # Apenas detecta clique, sem destaque
+    if x <= mouse_pos[0] <= x + width and y <= mouse_pos[1] <= y + height:
+        if pygame.mouse.get_pressed()[0]:
+            clicked = True
+
+    # Apenas desenhe o texto, sem papel extra
     draw_text(text, font_medium, BLACK, x + width//2, y + height//2, True)
     return clicked
 
@@ -372,28 +410,25 @@ def draw_battle_screen():
         y_buttons = 70  # topo da tela
 
         if draw_button("Fácil (15 de dano)", start_x, y_buttons, button_width, button_height, BLUE, (100, 100, 255)):
-            return "easy"
+            return ("easy", 15)
         if draw_button("Médio (25 de dano)", start_x + button_width + spacing, y_buttons, button_width, button_height, YELLOW, (200, 200, 0)):
-            return "medium"
+            return ("medium", 25)
         if draw_button("Difícil (40 de dano)", start_x + (button_width + spacing) * 2, y_buttons, button_width, button_height, RED, (255, 100, 100)):
-            return "hard"
+            return ("hard", 40)
+
+        # Botão de teste para passar de boss
+        if draw_button("TESTE: PASSAR DE BOSS", WIDTH//2 - 150, y_buttons + button_height + 60, 300, 50, PURPLE, (128, 0, 128)):
+            bosses[current_boss]["hp"] = 0
+            return ("victory", 0)
 
     # --- Ataques do turno (meio da tela) ---
-    y_offset = 150
-    for attack in boss_attacks_this_turn:
-        draw_text(f"{bosses[current_boss]['name']} usou {attack['name']}!", font_small, RED, 50, y_offset)
-        draw_text(f"Efeito: {attack['effect']}", font_small, WHITE, 50, y_offset + 20)
-        y_offset += 50
+  
 
-    for attack in player_attacks_this_turn:
-        draw_text(f"Você usou {attack['name']}!", font_small, GREEN, 50, y_offset)
-        draw_text(f"Efeito: {attack['effect']}", font_small, WHITE, 50, y_offset + 20)
-        y_offset += 50
-
-    # Descrição do ataque baseado no dado
+    # Descrição do ataque baseado no dado (centralizada e fonte maior)
     if attack_description:
-        draw_text(f"Resultado do dado: {dice_roll}", font_medium, YELLOW, WIDTH//2, y_offset, True)
-        draw_text(attack_description, font_small, WHITE, WIDTH//2, y_offset + 30, True)
+        center_y = HEIGHT // 2
+        draw_text(f"Resultado do dado: {dice_roll}", font_large, YELLOW, WIDTH//2, center_y - 30, True)
+        draw_text(attack_description, font_large, WHITE, WIDTH//2, center_y + 20, True)
         y_offset += 60
 
     # --- Infos e lifebar na parte de baixo ---
@@ -419,57 +454,72 @@ def draw_battle_screen():
     # Boss (direita)
     boss = bosses[current_boss]
     draw_text(f"{boss['name']}", font_medium, RED, WIDTH - 250, bottom_y)
-    draw_hp_bar(boss["hp"], bosses[current_boss]["hp"], WIDTH - 250, bottom_y + 30, 200, 20, RED)
-    draw_text(f"Vida: {boss['hp']}/{bosses[current_boss]['hp']}", font_small, WHITE, WIDTH - 250, bottom_y + 55)
+    draw_hp_bar(boss["hp"], boss["max_hp"], WIDTH - 250, bottom_y + 30, 200, 20, RED)
+    draw_text(f"Vida: {boss['hp']}/{boss['max_hp']}", font_small, WHITE, WIDTH - 250, bottom_y + 55)
+
+    # Exibe o resultado do último ataque no centro da tela, se houver
+    if last_result is not None:
+        msg = "Você acertou!" if last_result == "acertou" else "Você errou!"
+        color = GREEN if last_result == "acertou" else RED
+        draw_text(msg, font_large, color, WIDTH//2, HEIGHT//2 - 60, True)
+        draw_text(f"Ataque: {last_attack_name}", font_large, YELLOW, WIDTH//2, HEIGHT//2, True)
+        draw_text(last_attack_effect, font_medium, WHITE, WIDTH//2, HEIGHT//2 + 50, True)
 
     return None
 
-def draw_question_screen(question_data, no_alternatives=False, no_sound=False):
+def draw_question_screen(question_data):
     screen.fill(BLACK)
-    
-    if no_sound:
-        draw_text("Você não consegue ouvir a pergunta por causa do funk!", font_medium, RED, WIDTH//2, 100, True)
-    else:
-        draw_text(question_data["question"], font_medium, WHITE, WIDTH//2, 100, True)
-    
-    y_offset = 150
-    if no_alternatives:
-        draw_text("As alternativas estão ilegíveis por causa da fumaça!", font_medium, RED, WIDTH//2, y_offset, True)
-        y_offset += 50
-        
-        # Mostra as opções como "A) ???", "B) ???", etc.
-        for i in range(len(question_data["options"])):
-            option_text = f"{chr(65 + i)}) ???"
-            if draw_button(option_text, WIDTH//2 - 100, y_offset, 200, 40, PURPLE, (178, 102, 255)):
-                return i
-            y_offset += 50
-    else:
-        for i, option in enumerate(question_data["options"]):
-            if draw_button(f"{chr(65 + i)}) {option}", WIDTH//2 - 200, y_offset, 400, 40, BLUE, (100, 100, 255)):
-                return i
-            y_offset += 50
-    
+
+    # Centraliza o bloco da pergunta
+    question_box_width = 1000
+    question_box_height = 120
+    question_box_x = WIDTH//2 - question_box_width//2
+    question_box_y = HEIGHT//2 - 220  # Ajuste vertical para centralizar tudo
+
+    # Desenha a folha no fundo da questão
+    folha_question = pygame.transform.scale(folha_img, (question_box_width, question_box_height))
+    screen.blit(folha_question, (question_box_x, question_box_y))
+
+    # Sempre mostra a pergunta normalmente
+    draw_text(question_data["question"], font_medium, BLACK, WIDTH//2, question_box_y + question_box_height//2, True)
+
+    # Centraliza as alternativas logo abaixo da pergunta
+    option_width = 700
+    option_height = 50
+    option_x = WIDTH//2 - option_width//2
+
+    num_options = len(question_data["options"])
+    y_offset = question_box_y + question_box_height + 40  # 40px de espaço após a pergunta
+    folha_alt = pygame.transform.scale(folha_img, (option_width, option_height))
+
+    for i, option in enumerate(question_data["options"]):
+        alt_y = y_offset + i * (option_height + 20)
+        if draw_button(f"{chr(65 + i)}) {option}", option_x, alt_y, option_width, option_height, BLACK, BLACK):
+            return i
+
     return None
 
 def draw_intro_screen():
     screen.blit(intro_img, (0, 0))
 
-    draw_text("RPG Periodo Composto", font_title, BLACK, WIDTH//2, 120, True)
+    draw_text_with_paper("RPG Periodo Composto", font_title, BLACK, WIDTH//2, 120, True)
 
     # Botões
     button_width = 300
     button_height = 50
     spacing = 30
-    start_y = 250
+    num_buttons = 3
+    total_height = num_buttons * button_height + (num_buttons - 1) * spacing
+    start_y = HEIGHT // 2 - total_height // 2
 
     # INICIAR
-    if draw_button("INICIAR", WIDTH//2 - button_width//2, start_y, button_width, button_height, BLACK, (0, 200, 0)):
+    if draw_button_with_image("INICIAR", WIDTH//2 - button_width//2, start_y, button_width, button_height, folha_img, (0, 200, 0)):
         return "start"
     # CONFIGURAÇÕES (sem função)
-    if draw_button("CONFIGURAÇÕES", WIDTH//2 - button_width//2, start_y + button_height + spacing, button_width, button_height, BLACK, (100, 100, 255)):
+    if draw_button_with_image("CONFIGURAÇÕES", WIDTH//2 - button_width//2, start_y + button_height + spacing, button_width, button_height, folha_img, (100, 100, 255)):
         pass
     # SAIR DO JOGO
-    if draw_button("SAIR DO JOGO", WIDTH//2 - button_width//2, start_y + 2*(button_height + spacing), button_width, button_height, BLACK, (200, 0, 0)):
+    if draw_button_with_image("SAIR DO JOGO", WIDTH//2 - button_width//2, start_y + 2*(button_height + spacing), button_width, button_height, folha_img, (200, 0, 0)):
         pygame.quit()
         sys.exit()
 
@@ -479,33 +529,42 @@ def draw_victory_screen():
     screen.fill(BLACK)
     
     boss = bosses[current_boss]
-    draw_text(f"VITÓRIA CONTRA {boss['name'].upper()}!", font_title, YELLOW, WIDTH//2, 100, True)
+    draw_text(f"VITÓRIA CONTRA {boss['name'].upper()}!", font_title, YELLOW, WIDTH//2, HEIGHT//2 - 120, True)
     
     if current_boss == 0:
         story = [
+            "",
+            "",
             "Você derrotou o Repetente do Fundão!",
             "Ele dropa uma Julieti que pode ser usada como item cosmético.",
             "Você adormece novamente, indo para a próxima batalha..."
         ]
     elif current_boss == 1:
         story = [
+            "",
+            "",
             "Você derrotou o Advogado Rebuscado!",
             "Ele dropa um maço de dinheiro que seria usado para subornar o juiz.",
             "Você toma uma rasteira de um guarda e apaga..."
         ]
     else:
         story = [
+            "",
+            "",
             "VOCÊ DERROTOU IVELÃ PEREIRA!",
             "Você cai de exaustão no chão, mas sabe que tudo valeu a pena.",
             "Sua alma foi recuperada e você passou de semestre!"
         ]
     
-    y_offset = 180
+    # Centraliza o bloco de texto verticalmente
+    total_lines = len(story)
+    start_y = HEIGHT//2 - (total_lines * 30)
     for line in story:
-        draw_text(line, font_medium, WHITE, WIDTH//2, y_offset, True)
-        y_offset += 40
-    
-    if draw_button("CONTINUAR", WIDTH//2 - 100, HEIGHT - 100, 200, 50, GREEN, (0, 200, 0)):
+        draw_text(line, font_medium, WHITE, WIDTH//2, start_y, True)
+        start_y += 60
+
+    # Botão centralizado
+    if draw_button("CONTINUAR", WIDTH//2 - 100, HEIGHT//2 + 120, 200, 50, GREEN, (0, 200, 0)):
         return True
     
     return False
@@ -546,19 +605,22 @@ def draw_game_over_screen():
 def draw_ending_screen():
     screen.fill(BLACK)
     
-    if wrong_answers == 0:
+    # Finais baseados na vida do jogador ao derrotar o boss final
+    if player_hp >= 150:
         draw_text("FINAL BOM: YOUTUBER", font_title, GREEN, WIDTH//2, 100, True)
         ending_text = [
-            "Você não errou nenhuma pergunta!",
+            "",
+            "Você terminou com muita vida!",
             "",
             "Você vira youtuber de língua portuguesa falido,",
             "precisando se humilhar com gracinhas nos vídeos",
             "para entreter alunos com TDAH e criar engajamento."
         ]
-    elif wrong_answers <= 3:
+    elif player_hp >= 75:
         draw_text("FINAL MEDIANO: PROFESSOR", font_title, YELLOW, WIDTH//2, 100, True)
         ending_text = [
-            "Você errou algumas perguntas...",
+            "",
+            "Você terminou com vida razoável...",
             "",
             "Você vira professor de português do ensino médio",
             "mal remunerado em uma escola estadual",
@@ -567,17 +629,22 @@ def draw_ending_screen():
     else:
         draw_text("FINAL RUIM: CORRETOR ALHEIO", font_title, RED, WIDTH//2, 100, True)
         ending_text = [
-            "Você errou muitas perguntas...",
+            "",
+            "Você terminou quase sem vida...",
             "",
             "Você passa a corrigir o português de posts no Twitter",
             "para se sentir brevemente superior e suprir seu vazio interno."
         ]
     
-    y_offset = 180
+    # Centraliza verticalmente o bloco de texto
+    line_height = 40
+    total_height = len(ending_text) * line_height
+    y_offset = HEIGHT // 2 - total_height // 2
+
     for line in ending_text:
         draw_text(line, font_medium, WHITE, WIDTH//2, y_offset, True)
-        y_offset += 40
-    
+        y_offset += line_height
+
     if draw_button("JOGAR NOVAMENTE", WIDTH//2 - 150, HEIGHT - 100, 300, 50, GREEN, (0, 200, 0)):
         reset_game()
         return True
@@ -586,130 +653,99 @@ def draw_ending_screen():
 
 def reset_game():
     global player_hp, current_boss, correct_answers, wrong_answers, game_state
+    global boss_attack_indices, player_attack_indices
     player_hp = 200
     current_boss = 0
     correct_answers = 0
     wrong_answers = 0
     game_state = "intro"
-    
+    boss_attack_indices = [0 for _ in bosses]
+    player_attack_indices = [0 for _ in bosses]
     # Reset boss HPs
     for boss in bosses:
-        boss["hp"] = bosses[bosses.index(boss)]["hp"]
+        boss["hp"] = boss["max_hp"]
 
 def boss_turn():
-    global player_hp, boss_attacks_this_turn
-    
+    global player_hp, boss_attacks_this_turn, boss_attack_indices
+
     boss = bosses[current_boss]
     boss_attacks_this_turn = []
-    
-    # Escolhe um ataque aleatório
-    attack = random.choice(boss["attacks"])
-    
-    # Verifica se é o ataque mortal da Ivelã (1 em 6 chance)
-    if current_boss == 2 and attack["name"] == "Suspensão" and random.randint(1, 6) != 1:
-        # Escolhe outro ataque se não for o 1
-        other_attacks = [a for a in boss["attacks"] if a["name"] != "Suspensão"]
-        attack = random.choice(other_attacks)
-    
+
+    # Ataque em ordem, looping
+    idx = boss_attack_indices[current_boss]
+    attack = boss["attacks"][idx]
+    boss_attack_indices[current_boss] = (idx + 1) % len(boss["attacks"])
+
     boss_attacks_this_turn.append(attack)
-    
-    # Aplica o dano
-    if attack["damage"] > 0:
-        player_hp -= attack["damage"]
-    
+
     # Verifica se o jogador morreu
     if player_hp <= 0:
         return "game_over"
-    
+
     return attack["special"]
 
-def player_turn(difficulty):
-    global player_hp, correct_answers, wrong_answers, dice_roll, attack_description, player_attacks_this_turn
-    
-    # Limpa ataques do turno anterior
+def show_result_screen(acertou, ataque, efeito):
+    # Exibe o resultado (acerto/erro) e o ataque correspondente no centro da tela por 2 segundos
+    screen.fill(BLACK)
+    msg = "Você acertou!" if acertou else "Você errou!"
+    draw_text(msg, font_large, GREEN if acertou else RED, WIDTH//2, HEIGHT//2 - 60, True)
+    draw_text(f"Ataque: {ataque}", font_large, YELLOW, WIDTH//2, HEIGHT//2, True)
+    draw_text(efeito, font_medium, WHITE, WIDTH//2, HEIGHT//2 + 50, True)
+    pygame.display.flip()
+    pygame.time.delay(2000)
+
+def player_turn(difficulty, damage):
+    global player_hp, correct_answers, wrong_answers, player_attacks_this_turn
+    global last_result, last_attack_name, last_attack_effect
+
     player_attacks_this_turn = []
-    
+    last_result = None
+    last_attack_name = ""
+    last_attack_effect = ""
+
     # Escolhe uma pergunta baseada na dificuldade
     difficulty_level = 0 if difficulty == "easy" else 1 if difficulty == "medium" else 2
     question_data = random.choice(questions[difficulty_level])
-    
+
     # Mostra a tela de pergunta
-    no_alternatives = any(attack.get("special") == "no_alternatives" for attack in boss_attacks_this_turn)
-    no_sound = any(attack.get("special") == "no_sound" for attack in boss_attacks_this_turn)
-    
     answer = None
     while answer is None:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-        
-        answer = draw_question_screen(question_data, no_alternatives, no_sound)
+        answer = draw_question_screen(question_data)
         pygame.display.flip()
-    
-    # Rola o dado
-    dice_roll = roll_dice()
-    
-    # Determina a descrição do ataque baseado no dado
-    attack_descriptions = [
-        "Você ataca com um lápis afiado!",
-        "Você usa o dicionário Aurélio como arma!",
-        "Você lança uma borracha na cabeça do inimigo!",
-        "Você argumenta com lógica gramatical!",
-        "Você cita Machado de Assis para confundir o inimigo!",
-        "Você usa a redação nota mil como escudo e ataca!"
-    ]
-    attack_description = attack_descriptions[dice_roll - 1]
-    
-    # Verifica se a resposta está correta
+
     if answer == question_data["answer"]:
         correct_answers += 1
-        
-        # Escolhe um ataque aleatório do jogador contra este boss
-        player_attack = random.choice(bosses[current_boss]["player_attacks"])
+        # Ataque do player em ordem, looping
+        idx = player_attack_indices[current_boss]
+        player_attack = bosses[current_boss]["player_attacks"][idx]
+        player_attack_indices[current_boss] = (idx + 1) % len(bosses[current_boss]["player_attacks"])
         player_attacks_this_turn.append(player_attack)
-        
-        # Aplica o dano
-        bosses[current_boss]["hp"] -= question_data["damage"] + (dice_roll * 2)
-        
-        # Aplica efeitos especiais
-        if player_attack["damage"] > 0:
-            bosses[current_boss]["hp"] -= player_attack["damage"]
-        
-        if player_attack.get("special") == "heal_40":
-            player_hp = min(200, player_hp + 40)
-        elif player_attack.get("special") == "heal_30":
-            player_hp = min(200, player_hp + 30)
-        elif player_attack.get("special") == "heal_50":
-            player_hp = min(200, player_hp + 50)
-        
-        # Verifica se o boss morreu
+        bosses[current_boss]["hp"] -= damage
+        last_result = "acertou"
+        last_attack_name = player_attack["name"]
+        last_attack_effect = player_attack["effect"]
         if bosses[current_boss]["hp"] <= 0:
             return "victory"
-        
-        # Efeitos que afetam o próximo turno
         if player_attack.get("special") in ["extra_turn", "skip_turn"]:
             return player_attack["special"]
-        
         return None
     else:
         wrong_answers += 1
-        
-        # O boss contra-ataca com o mesmo dano
-        bosses[current_boss]["hp"] -= question_data["damage"] // 2  # Dano reduzido por errar
-        player_hp -= question_data["damage"]
-        
-        # Verifica se o jogador morreu
+        boss_attack = random.choice(bosses[current_boss]["attacks"])
+        player_hp -= damage
+        last_result = "errou"
+        last_attack_name = boss_attack["name"]
+        last_attack_effect = boss_attack["effect"]
         if player_hp <= 0:
             return "game_over"
-        
-        # Verifica efeitos condicionais
         if any(attack.get("special") == "conditional_half" for attack in player_attacks_this_turn):
             return "boss_half_attack"
-        
         if any(attack.get("special") == "skip_if_wrong" for attack in player_attacks_this_turn) and random.choice([True, False]):
             return "skip_turn"
-        
         return None
 
 def draw_context_screen():
@@ -736,7 +772,7 @@ def draw_context_screen():
 
     y = HEIGHT // 2 - (len(linhas) * 20)
     for linha in linhas:
-        draw_text(linha.strip(), font_medium, BLACK, WIDTH//2, y, True)
+        draw_text_with_paper(linha.strip(), font_medium, BLACK, WIDTH//2, y, True)
         y += 40
 
     # O botão é sempre desenhado
@@ -754,7 +790,7 @@ def draw_context_screen():
 def draw_context_boss(bossn):
     global mouse_released
     screen.blit(boss_bg_imgs[bossn], (0, 0))
-    textos_dos_bosses = ["Você acorda sem muito saber o que aconteceu, olha ao redor e percebe que está em uma sala de aula comum, você olha para o quadro e percebe que o conteúdo de substantivos está sendo passado, o que torna impossível reconhecer se você está na sexta série ou no terceirão. Pouco tempo se passa até que alguém entra pela porta, um homem visivelmente mais velho que todos os alunos daquela classe, ele imediatamente começa a lhe encarar, uma aura começa a crescer ao redor dele(igual a dos dragões heroicos do dragon city), você percebe que ele é o primeiro boss e a batalha começa.","Você acorda com as mãos atrás das costas e algemado, dois homens altos e uniformizados estão te acompanhando ao seu lado, você está no que parece ser uma casa chique e antiga, com decorações e entalhes de madeira envernizada na parede, você se pergunta aonde estão te levando, vocês param em frente a uma grande porta de madeira, que se abre sozinha, revelando um grande salão, você analisa o local por alguns segundos e percebe que está em um júri, e que o réu é você. Logo ao entrar você percebe alguém que se destaca em meio a todos, um advogado, de terno e com cabelo alisado. Pouco depois esse homem aponta para você se e percebe que ele é o segundo boss. Uma aura (igual a de super sayajin) cresce ao redor dele e a segunda batalha começa.","Voce acorda novamente, desta vez em uma cadeira extremamente desconfortável, na sua frente uma mesa inclinada -“Quem foi o idiota que fez uma mesa inclinada?” você se pergunta. Olha ao seu redor e percebe que está totalmente sozinho em uma sala de aula do IFSC, com somente a sua carteira. Na sua frente, você vê um papel com o título “Recuperação de Portugues”. “O que está acontecendo?” Você se pergunta, mas antes mesmo de poder fazer hipóteses uma professora entra pela porta da sala, nada mais nada menos que Ivelã Pereira.Ivela para na sua frente e uma aura igual a de Michael Jordan cresce ao redor dela, a batalha final começa."]
+    textos_dos_bosses = ["Você acorda sem muito saber o que aconteceu, olha ao redor e percebe que está em uma sala de aula comum, você olha para o quadro e percebe que o conteúdo de substantivos está sendo passado, o que torna impossível reconhecer se você está na sexta série ou no terceirão. Pouco tempo se passa até que alguém entra pela porta, um homem visivelmente mais velho que todos os alunos daquela classe, ele imediatamente começa a lhe encarar, uma aura começa a crescer ao redor dele(igual a dos dragões heroicos do dragon city), você percebe que ele é o primeiro boss e a batalha começa.","Você acorda com as mãos atrás das costas e algemado, dois homens altos e uniformizados estão te acompanhando ao seu lado, você está no que parece ser uma casa chique e antiga, com decorações e entalhes de madeira envernizada na parede, você se pergunta aonde estão te levando, vocês param em frente a uma grande porta de madeira, que se abre sozinha, revelando um grande salão, você analisa o local por alguns segundos e percebe que está em um júri, e que o réu é você. Logo ao entrar você percebe alguém que se destaca em meio a todos os outros, um advogado, de terno e com cabelo alisado. Pouco depois esse homem aponta para você se e percebe que ele é o segundo boss. Uma aura (igual a de super sayajin) cresce ao redor dele e a segunda batalha começa.","Voce acorda novamente, desta vez em uma cadeira extremamente desconfortável, na sua frente uma mesa inclinada -“Quem foi o idiota que fez uma mesa inclinada?” você se pergunta. Olha ao seu redor e percebe que está totalmente sozinho em uma sala de aula do IFSC, com somente a sua carteira. Na sua frente, você vê um papel com o título “Recuperação de Portugues”. “O que está acontecendo?” Você se pergunta, mas antes mesmo de poder fazer hipóteses uma professora entra pela porta da sala, nada mais nada menos que Ivelã Pereira.Ivela para na sua frente e uma aura igual a de Michael Jordan cresce ao redor dela, a batalha final começa."]
     texto = textos_dos_bosses[bossn]
 
     # Quebra o texto em várias linhas se for muito longo
@@ -776,7 +812,7 @@ def draw_context_boss(bossn):
 
     y = HEIGHT // 2 - (len(linhas) * 20)
     for linha in linhas:
-        draw_text(linha.strip(), font_medium, BLACK, WIDTH//2, y, True)
+        draw_text_with_paper(linha.strip(), font_medium, BLACK, WIDTH//2, y, True)
         y += 40
 
     # O botão é sempre desenhado
@@ -790,6 +826,56 @@ def draw_context_boss(bossn):
     else:
         mouse_released = True
     return False
+
+def draw_boss_explain_screen(bossn):
+    global mouse_released
+    screen.blit(boss_bg_imgs[bossn], (0, 0))
+    boss = bosses[bossn]
+    desc = boss_explain_texts[bossn]
+    # Quebra a descrição em linhas menores se necessário
+    def wrap_text(text, font, max_width):
+        words = text.split(' ')
+        lines = []
+        current_line = ""
+        for word in words:
+            test_line = current_line + word + " "
+            if font.size(test_line)[0] > max_width:
+                lines.append(current_line)
+                current_line = word + " "
+            else:
+                current_line = test_line
+        lines.append(current_line)
+        return lines
+    lines = wrap_text(desc, font_medium, 900)
+    y = HEIGHT // 2 - (len(lines) * 20)
+    draw_text_with_paper(f"Boss: {boss['name']}", font_large, RED, WIDTH//2, y - 60, True)
+    for line in lines:
+        draw_text_with_paper(line.strip(), font_medium, BLACK, WIDTH//2, y, True)
+        y += 40
+
+    # Botão para continuar
+    clicked = draw_button("COMEÇAR BATALHA", WIDTH//2 - 150, HEIGHT - 100, 300, 50, GREEN, (0, 200, 0))
+
+    # Controle de clique igual às outras telas
+    if clicked:
+        if mouse_released:
+            mouse_released = False
+            return True
+    else:
+        mouse_released = True
+    return False
+
+def draw_text_with_paper(text, font, color, x, y, centered=False, padding_x=40, padding_y=20):
+    text_surface = font.render(text, True, color)
+    text_rect = text_surface.get_rect(center=(x, y) if centered else (x, y))
+    # Calcula o tamanho do papel com base no texto + padding
+    paper_width = text_rect.width + padding_x * 2
+    paper_height = text_rect.height + padding_y * 2
+    paper_img = pygame.transform.scale(folha_img, (paper_width, paper_height))
+    paper_rect = paper_img.get_rect(center=text_rect.center)
+    screen.blit(paper_img, paper_rect)
+    screen.blit(text_surface, text_rect)
+    return text_rect
 
 # Loop principal do jogo
 running = True
@@ -816,14 +902,24 @@ while running:
 
     elif game_state == "boss_context":
         if draw_context_boss(current_boss):
+            last_result = None
+            last_attack_name = ""
+            last_attack_effect = ""
+            game_state = "boss_explain"
+
+    elif game_state == "boss_explain":
+        # Só mostra a tela de descrição se NÃO for o último boss
+        if current_boss < len(bosses) - 1:
+            if draw_boss_explain_screen(current_boss):
+                game_state = "battle"
+        else:
             game_state = "battle"
 
-    
     elif game_state == "battle":
         action = draw_battle_screen()
-        
-        if action in ["easy", "medium", "hard"]:
-            special_effect = player_turn(action)
+        if isinstance(action, tuple):
+            difficulty, damage = action
+            special_effect = player_turn(difficulty, damage)
             
             if special_effect == "victory":
                 game_state = "victory"
