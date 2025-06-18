@@ -128,41 +128,62 @@ bosses = [
 
 # Perguntas do jogo (período composto)
 questions = [
-    # Fácil
+    # Fácil damage 15
     [
-        {"question": "Qual é a conjunção que introduz uma oração subordinada adverbial causal?", 
+        {"question": "O que é um período composto?", 
+         "options": ["Uma frase com apenas um verbo", " Uma frase com dois ou mais verbos", "Uma frase sem sujeito", "Uma palavra isolada"], 
+         "answer": 1, "damage": 15},        
+         {"question": "Qual das opções é um exemplo de período composto?", 
+         "options": ["Eu estudei", "Choveu ontem", "Fui ao mercado e comprei frutas", "Amanhã viajarei"], 
+         "answer": 2, "damage": 15},        
+         {"question": "Cheguei em casa e liguei a TV. Quantas orações há nesse período?", 
+         "options": ["1", "2", "3", "4"], 
+         "answer": 1, "damage": 15},        
+         {"question": "Qual conjunção pode ligar duas orações em um período composto?", 
+         "options": ["mas", "porque", "e", "todas as anteriores"], 
+         "answer": 3, "damage": 15},        
+         {"question": "Qual é a conjunção que introduz uma oração subordinada adverbial causal?", 
+         "options": ["porque", "e", "mas", "ou"], 
+         "answer": 0, "damage": 15},        
+         {"question": "Qual é a conjunção que introduz uma oração subordinada adverbial causal?", 
+         "options": ["porque", "e", "mas", "ou"], 
+         "answer": 0, "damage": 15},        
+         {"question": "Qual é a conjunção que introduz uma oração subordinada adverbial causal?", 
+         "options": ["porque", "e", "mas", "ou"], 
+         "answer": 0, "damage": 15},        
+         {"question": "Qual é a conjunção que introduz uma oração subordinada adverbial causal?", 
+         "options": ["porque", "e", "mas", "ou"], 
+         "answer": 0, "damage": 15},        
+         {"question": "Qual é a conjunção que introduz uma oração subordinada adverbial causal?", 
+         "options": ["porque", "e", "mas", "ou"], 
+         "answer": 0, "damage": 15},        
+         {"question": "Qual é a conjunção que introduz uma oração subordinada adverbial causal?", 
+         "options": ["porque", "e", "mas", "ou"], 
+         "answer": 0, "damage": 15},        
+         {"question": "Qual é a conjunção que introduz uma oração subordinada adverbial causal?", 
+         "options": ["porque", "e", "mas", "ou"], 
+         "answer": 0, "damage": 15},        
+         {"question": "Qual é a conjunção que introduz uma oração subordinada adverbial causal?", 
+         "options": ["porque", "e", "mas", "ou"], 
+         "answer": 0, "damage": 15},        
+         {"question": "Qual é a conjunção que introduz uma oração subordinada adverbial causal?", 
+         "options": ["porque", "e", "mas", "ou"], 
+         "answer": 0, "damage": 15},        
+         {"question": "Qual é a conjunção que introduz uma oração subordinada adverbial causal?", 
+         "options": ["porque", "e", "mas", "ou"], 
+         "answer": 0, "damage": 15},        
+         {"question": "Qual é a conjunção que introduz uma oração subordinada adverbial causal?", 
          "options": ["porque", "e", "mas", "ou"], 
          "answer": 0, "damage": 15},
-        {"question": "Em 'Fui à festa, porém não me diverti.', qual é o tipo de período?", 
-         "options": ["composto por subordinação", "composto por coordenação", "simples", "indeterminado"], 
-         "answer": 1, "damage": 15},
-        {"question": "Qual conjunção indica adversidade?", 
-         "options": ["e", "mas", "porque", "se"], 
-         "answer": 1, "damage": 15},
+         
     ],
-    # Médio
+    # Médio damage 25
     [
-        {"question": "Em 'Se estudar, passará.', qual é a classificação da oração 'Se estudar'?", 
-         "options": ["subordinada adverbial condicional", "subordinada substantiva completiva", "coordenada sindética adversativa", "principal"], 
-         "answer": 0, "damage": 25},
-        {"question": "Em 'Desejo que você seja feliz.', qual é a função sintática de 'que você seja feliz'?", 
-         "options": ["objeto direto", "objeto indireto", "aposto", "predicativo"], 
-         "answer": 0, "damage": 25},
-        {"question": "Qual é a conjunção que introduz uma oração subordinada adverbial consecutiva?", 
-         "options": ["que", "porque", "embora", "conquanto"], 
-         "answer": 0, "damage": 25},
+
     ],
-    # Difícil
+    # Difícil damage 40
     [
-        {"question": "Em 'Não falei, porque me interromperam.', qual é a análise correta do período?", 
-         "options": ["coordenada sindética explicativa", "subordinada adverbial causal", "coordenada assindética", "subordinada substantiva objetiva direta"], 
-         "answer": 0, "damage": 40},
-        {"question": "Em 'Conquanto estudasse muito, não foi aprovado.', qual é a classificação da oração 'Conquanto estudasse muito'?", 
-         "options": ["subordinada adverbial concessiva", "subordinada adverbial causal", "subordinada substantiva completiva", "coordenada sindética adversativa"], 
-         "answer": 0, "damage": 40},
-        {"question": "Em 'O fato é que ele não compareceu.', qual é a função sintática de 'que ele não compareceu'?", 
-         "options": ["predicativo do sujeito", "objeto direto", "aposto", "adjunto adverbial"], 
-         "answer": 0, "damage": 40},
+
     ]
 ]
 
