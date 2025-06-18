@@ -8,7 +8,7 @@ pygame.init()
 pygame.mixer.init()
 
 # Configurações da tela
-WIDTH, HEIGHT = 800, 600
+WIDTH, HEIGHT = 1920, 1080
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("RPG Periodo Composto")
 # Carrega o som de fundo
@@ -131,59 +131,190 @@ questions = [
     # Fácil damage 15
     [
         {"question": "O que é um período composto?", 
-         "options": ["Uma frase com apenas um verbo", " Uma frase com dois ou mais verbos", "Uma frase sem sujeito", "Uma palavra isolada"], 
-         "answer": 1, "damage": 15},        
-         {"question": "Qual das opções é um exemplo de período composto?", 
+         "options": ["Uma frase com apenas um verbo", "Uma frase com dois ou mais verbos (orações)", "Uma frase sem sujeito", "Uma palavra isolada"], 
+         "answer": 1, "damage": 15},
+         
+        {"question": "Qual das opções é um exemplo de período composto?", 
          "options": ["Eu estudei", "Choveu ontem", "Fui ao mercado e comprei frutas", "Amanhã viajarei"], 
-         "answer": 2, "damage": 15},        
-         {"question": "Cheguei em casa e liguei a TV. Quantas orações há nesse período?", 
+         "answer": 2, "damage": 15},
+         
+        {"question": "'Cheguei em casa e liguei a TV.' Quantas orações há nesse período?", 
          "options": ["1", "2", "3", "4"], 
-         "answer": 1, "damage": 15},        
-         {"question": "Qual conjunção pode ligar duas orações em um período composto?", 
+         "answer": 1, "damage": 15},
+         
+        {"question": "Qual conjunção pode ligar duas orações em um período composto?", 
          "options": ["mas", "porque", "e", "todas as anteriores"], 
-         "answer": 3, "damage": 15},        
-         {"question": "Qual é a conjunção que introduz uma oração subordinada adverbial causal?", 
-         "options": ["porque", "e", "mas", "ou"], 
-         "answer": 0, "damage": 15},        
-         {"question": "Qual é a conjunção que introduz uma oração subordinada adverbial causal?", 
-         "options": ["porque", "e", "mas", "ou"], 
-         "answer": 0, "damage": 15},        
-         {"question": "Qual é a conjunção que introduz uma oração subordinada adverbial causal?", 
-         "options": ["porque", "e", "mas", "ou"], 
-         "answer": 0, "damage": 15},        
-         {"question": "Qual é a conjunção que introduz uma oração subordinada adverbial causal?", 
-         "options": ["porque", "e", "mas", "ou"], 
-         "answer": 0, "damage": 15},        
-         {"question": "Qual é a conjunção que introduz uma oração subordinada adverbial causal?", 
-         "options": ["porque", "e", "mas", "ou"], 
-         "answer": 0, "damage": 15},        
-         {"question": "Qual é a conjunção que introduz uma oração subordinada adverbial causal?", 
-         "options": ["porque", "e", "mas", "ou"], 
-         "answer": 0, "damage": 15},        
-         {"question": "Qual é a conjunção que introduz uma oração subordinada adverbial causal?", 
-         "options": ["porque", "e", "mas", "ou"], 
-         "answer": 0, "damage": 15},        
-         {"question": "Qual é a conjunção que introduz uma oração subordinada adverbial causal?", 
-         "options": ["porque", "e", "mas", "ou"], 
-         "answer": 0, "damage": 15},        
-         {"question": "Qual é a conjunção que introduz uma oração subordinada adverbial causal?", 
-         "options": ["porque", "e", "mas", "ou"], 
-         "answer": 0, "damage": 15},        
-         {"question": "Qual é a conjunção que introduz uma oração subordinada adverbial causal?", 
-         "options": ["porque", "e", "mas", "ou"], 
-         "answer": 0, "damage": 15},        
-         {"question": "Qual é a conjunção que introduz uma oração subordinada adverbial causal?", 
-         "options": ["porque", "e", "mas", "ou"], 
+         "answer": 3, "damage": 15},
+         
+        {"question": "'Fui ao mercado, porém estava fechado.' Qual a classificação da conjunção destacada?", 
+         "options": ["Aditiva", "Adversativa", "Conclusiva", "Explicativa"], 
+         "answer": 1, "damage": 15},
+         
+        {"question": "Qual desses períodos é composto?", 
+         "options": ["Ela estudou muito", "Ele correu e caiu", "Choveu à noite", "Todos dormiram cedo"], 
+         "answer": 1, "damage": 15},
+         
+        {"question": "O que é uma oração coordenada?", 
+         "options": ["Uma oração que depende de outra", "Uma oração que tem sentido completo sozinha", "Uma oração sem verbo", "Uma oração que só existe em períodos simples"], 
+         "answer": 1, "damage": 15},
+         
+        {"question": "'Fiquei em casa porque estava doente.' Qual a relação entre as orações?", 
+         "options": ["Adição", "Oposição", "Causa", "Tempo"], 
+         "answer": 2, "damage": 15},
+         
+        {"question": "Qual alternativa apresenta um período composto por coordenação?", 
+         "options": ["Quando cheguei, ela já tinha saído", "Estudei bastante, mas não fui bem", "Se chover, cancelaremos o passeio", "Quero que você volte cedo"], 
+         "answer": 1, "damage": 15},
+         
+        {"question": "'Se você sair, leve um guarda-chuva.' Qual é a oração principal?", 
+         "options": ["Se você sair", "Leve um guarda-chuva", "As duas são principais", "Não há oração principal"], 
+         "answer": 1, "damage": 15},
+         
+        {"question": "Qual é a função do 'que' em 'Espero que você venha'?", 
+         "options": ["Pronome relativo", "Conjunção integrante", "Pronome interrogativo", "Advérbio"], 
+         "answer": 1, "damage": 15},
+         
+        {"question": "'Ele disse que chegaria tarde.' Qual o tipo de oração subordinada?", 
+         "options": ["Substantiva", "Adjetiva", "Adverbial", "Coordenada"], 
          "answer": 0, "damage": 15},
          
+        {"question": "Qual alternativa contém uma oração subordinada adverbial temporal?", 
+         "options": ["Falei com ela, embora estivesse ocupada", "Quando anoiteceu, acendemos as luzes", "O livro que comprei é ótimo", "Quero que você leia mais"], 
+         "answer": 1, "damage": 15},
+         
+        {"question": "'O menino, que estava cansado, dormiu.' Qual a classificação da oração destacada?", 
+         "options": ["Subordinada adjetiva restritiva", "Subordinada adjetiva explicativa", "Subordinada substantiva", "Coordenada sindética"], 
+         "answer": 1, "damage": 15},
+         
+        {"question": "Qual é a conjunção que indica condição?", 
+         "options": ["E", "Mas", "Se", "Porque"], 
+         "answer": 2, "damage": 15}
     ],
+    
     # Médio damage 25
     [
-
+        {"question": "O que é um período composto?", 
+         "options": ["Uma frase com apenas um verbo e uma ação", "Uma estrutura com duas ou mais orações, independentes ou dependentes", "Um texto longo com muitos parágrafos", "Uma oração sem sujeito"], 
+         "answer": 1, "damage": 25},
+         
+        {"question": "Qual a principal diferença entre oração coordenada e oração subordinada?", 
+         "options": ["Coordenadas são dependentes; subordinadas são independentes", "Coordenadas são ligadas por vírgulas; subordinadas por pronomes", "Coordenadas têm independência sintática; subordinadas dependem da principal", "Subordinadas sempre iniciam com conjunções"], 
+         "answer": 2, "damage": 25},
+         
+        {"question": "O que caracteriza uma oração coordenada sindética?", 
+         "options": ["Não possui conjunção", "É ligada por conjunção (ex: 'e', 'mas', 'ou')", "Sempre expressa causa", "Substitui um substantivo"], 
+         "answer": 1, "damage": 25},
+         
+        {"question": "Dê um exemplo de período composto por coordenação.", 
+         "options": ["Quando cheguei, ela dormia", "Ele estudou, mas não passou", "A casa que comprei é grande", "Porque choras?"], 
+         "answer": 1, "damage": 25},
+         
+        {"question": "Dê um exemplo de período composto por subordinação.", 
+         "options": ["Ela riu e ele sorriu", "Se você sair, leve um guarda-chuva", "O dia estava lindo, porém frio", "Todos cantaram e dançaram"], 
+         "answer": 1, "damage": 25},
+         
+        {"question": "Identifique a conjunção e o tipo de relação em: 'Ele estudou bastante, mas não conseguiu passar.'", 
+         "options": ["'mas' – conclusiva", "'mas' – adversativa", "'mas' – explicativa", "'mas' – condicional"], 
+         "answer": 1, "damage": 25},
+         
+        {"question": "Transforme em período composto por coordenação: 'João chegou cedo. João foi embora tarde.'", 
+         "options": ["João chegou cedo, foi embora tarde", "João chegou cedo e foi embora tarde", "João, que chegou cedo, foi embora tarde", "Chegando cedo, João foi embora tarde"], 
+         "answer": 1, "damage": 25},
+         
+        {"question": "Em qual frase há uma oração subordinada?", 
+         "options": ["Fui ao cinema e depois ao parque", "Acredito que ela virá amanhã", "Corri muito, mas cheguei atrasado", "Ele sorriu e acenou"], 
+         "answer": 1, "damage": 25},
+         
+        {"question": "O que é uma oração subordinada adjetiva?", 
+         "options": ["Uma oração que equivale a um adjetivo, introduzida por pronome relativo", "Uma oração que indica tempo", "Uma oração independente ligada por 'e'", "Uma oração que expressa dúvida"], 
+         "answer": 0, "damage": 25},
+         
+        {"question": "Complete com uma oração subordinada adverbial de tempo: 'Assim que...'", 
+         "options": ["Assim que chegar, me avise", "Assim que feliz, ela sorriu", "Assim que o livro, li rápido", "Assim que grande, o cachorro latiu"], 
+         "answer": 0, "damage": 25},
+         
+        {"question": "Dê um exemplo de oração subordinada adverbial de causa.", 
+         "options": ["Como estava doente, faltou ao trabalho", "Ele faltou, mas estava doente", "Quando doente, ele faltou", "Faltou porque quis"], 
+         "answer": 0, "damage": 25},
+         
+        {"question": "Classifique a oração: 'Não fui porque estava doente.'", 
+         "options": ["Coordenada adversativa", "Subordinada adverbial causal", "Subordinada substantiva", "Coordenada explicativa"], 
+         "answer": 1, "damage": 25},
+         
+        {"question": "Qual o valor da conjunção 'mas' em: 'Estudei muito, mas tirei nota baixa.'?", 
+         "options": ["Adição", "Causa", "Oposição/contraste", "Tempo"], 
+         "answer": 2, "damage": 25},
+         
+        {"question": "Reescreva como período composto: 'Maria está cansada. Maria vai à escola mesmo assim.'", 
+         "options": ["Maria está cansada, mas vai à escola", "Maria, cansada, vai à escola", "Maria vai à escola porque está cansada", "Cansada, Maria foi à escola"], 
+         "answer": 0, "damage": 25},
+         
+        {"question": "O que é uma oração subordinada substantiva?", 
+         "options": ["Uma oração que funciona como substantivo na frase", "Uma oração que modifica um adjetivo", "Uma oração ligada por 'e'", "Uma oração que indica lugar"], 
+         "answer": 0, "damage": 25}
     ],
+    
     # Difícil damage 40
     [
-
+        {"question": "Analise sintaticamente o período: 'Se eu soubesse, teria te avisado.'", 
+         "options": ["Oração principal: 'teria te avisado'; subordinada adverbial condicional: 'Se eu soubesse'", "Duas orações coordenadas sindéticas", "Oração principal: 'Se eu soubesse'; subordinada substantiva completiva nominal", "Período simples com verbo auxiliar"], 
+         "answer": 0, "damage": 40},
+         
+        {"question": "Classifique as orações subordinadas na frase: 'Disse que viria, mas não veio.'", 
+         "options": ["'que viria' - substantiva objetiva direta; 'mas não veio' - coordenada adversativa", "Ambas são orações subordinadas adverbiais", "'que viria' - adjetiva restritiva; 'mas não veio' - coordenada explicativa", "'que viria' - substantiva subjetiva; 'mas não veio' - subordinada concessiva"], 
+         "answer": 0, "damage": 40},
+         
+        {"question": "Explique a diferença entre oração subordinada substantiva objetiva direta e objetiva indireta.", 
+         "options": ["Objetiva direta completa verbo sem preposição; indireta exige preposição", "Direta modifica substantivo; indireta modifica verbo", "Ambas são introduzidas por pronomes relativos", "Direta é sempre iniciada por 'que'; indireta por 'se'"], 
+         "answer": 0, "damage": 40},
+         
+        {"question": "Reescreva a frase substituindo a oração adjetiva por um adjunto adnominal: 'O aluno que estuda muito sempre tem bons resultados.'", 
+         "options": ["O aluno estudioso sempre tem bons resultados", "O aluno, porque estuda muito, tem bons resultados", "O aluno estuda muito para ter bons resultados", "O aluno sempre tem bons resultados que estuda muito"], 
+         "answer": 0, "damage": 40},
+         
+        {"question": "Classifique as orações no período: 'Embora tivesse pouco tempo, ele fez o trabalho que a professora pediu.'", 
+         "options": ["'Embora tivesse pouco tempo' - subordinada adverbial concessiva; 'que a professora pediu' - subordinada adjetiva", "Ambas são orações coordenadas sindéticas", "'Embora tivesse pouco tempo' - subordinada substantiva; 'que a professora pediu' - coordenada explicativa", "'Embora tivesse pouco tempo' - subordinada adverbial temporal; 'que a professora pediu' - subordinada adverbial causal"], 
+         "answer": 0, "damage": 40},
+         
+        {"question": "Identifique o tipo de oração subordinada adverbial: 'Ele saiu cedo para que chegasse a tempo.'", 
+         "options": ["Concessiva", "Final", "Causal", "Temporal"], 
+         "answer": 1, "damage": 40},
+         
+        {"question": "Transforme o período composto em simples: 'Como estava cansado, ele dormiu cedo.'", 
+         "options": ["Ele dormiu cedo por estar cansado", "Ele estava cansado, então dormiu cedo", "Dormiu cedo porque estava cansado", "Cansado, mas dormiu cedo"], 
+         "answer": 0, "damage": 40},
+         
+        {"question": "Identifique todas as orações do período: 'Assim que terminou o trabalho, foi embora sem se despedir.'", 
+         "options": ["'Assim que terminou o trabalho' - subordinada adverbial temporal; 'foi embora sem se despedir' - principal", "Duas orações coordenadas explicativas", "'terminou o trabalho' - principal; 'foi embora' - subordinada substantiva", "Período simples com locução verbal"], 
+         "answer": 0, "damage": 40},
+         
+        {"question": "Explique por que o período abaixo é um exemplo de subordinação: 'Espero que você compreenda a situação.'", 
+         "options": ["Porque possui duas orações independentes ligadas por vírgula", "Porque 'que você compreenda a situação' depende sintaticamente do verbo 'espero'", "Porque as orações são coordenadas por conjunção adversativa", "Porque é um período simples com sujeito composto"], 
+         "answer": 1, "damage": 40},
+         
+        {"question": "Classifique o tipo de oração: 'Mesmo que chova, iremos ao passeio.'", 
+         "options": ["Subordinada adverbial condicional", "Subordinada adverbial concessiva", "Subordinada substantiva completiva", "Subordinada adjetiva restritiva"], 
+         "answer": 1, "damage": 40},
+         
+        {"question": "Identifique o valor semântico da conjunção: 'Ele se esforçou tanto que passou no concurso.'", 
+         "options": ["Consequência", "Causa", "Comparação", "Concessão"], 
+         "answer": 0, "damage": 40},
+         
+        {"question": "Classifique as orações no período: 'Ele não só estudou como também fez exercícios.'", 
+         "options": ["Coordenadas sindéticas aditivas", "Subordinadas adverbiais temporais", "Subordinadas substantivas predicativas", "Coordenadas assindéticas"], 
+         "answer": 0, "damage": 40},
+         
+        {"question": "Reescreva trocando subordinação por coordenação: 'Porque estava doente, faltou à aula.'", 
+         "options": ["Estava doente, portanto faltou à aula", "Como estava doente, então faltou à aula", "Faltou à aula porque estava doente", "Estava doente, mas faltou à aula"], 
+         "answer": 0, "damage": 40},
+         
+        {"question": "Analise e classifique o período: 'Fique tranquilo, pois tudo dará certo.'", 
+         "options": ["Período composto por coordenação (explicativa)", "Período composto por subordinação (causal)", "Período simples com aposto", "Período composto por subordinação (concessiva)"], 
+         "answer": 0, "damage": 40},
+         
+        {"question": "Qual é o tipo de subordinação em: 'Embora não gostasse de falar em público, fez um ótimo discurso.'", 
+         "options": ["Causal", "Concessiva", "Condicional", "Comparativa"], 
+         "answer": 1, "damage": 40}
     ]
 ]
 
@@ -232,7 +363,7 @@ def draw_battle_screen():
 
     # --- Botões de escolha de nível no topo ---
     if game_state == "battle":
-        draw_text("Escolha o nível da pergunta:", font_medium, WHITE, WIDTH//2, 30, True)
+        draw_text("Escolha o nível da pergunta:", font_medium, BLACK, WIDTH//2, 30, True)
         button_width = 200
         button_height = 40
         spacing = 40
@@ -605,7 +736,47 @@ def draw_context_screen():
 
     y = HEIGHT // 2 - (len(linhas) * 20)
     for linha in linhas:
-        draw_text(linha.strip(), font_medium, WHITE, WIDTH//2, y, True)
+        draw_text(linha.strip(), font_medium, BLACK, WIDTH//2, y, True)
+        y += 40
+
+    # O botão é sempre desenhado
+    clicked = draw_button("CONTINUAR", WIDTH//2 - 100, HEIGHT - 100, 200, 50, GREEN, (0, 200, 0))
+
+    # Só avança se o mouse foi solto e depois pressionado novamente
+    if clicked:
+        if mouse_released:
+            mouse_released = False
+            return True
+    else:
+        mouse_released = True
+    return False
+
+def draw_context_boss(bossn):
+    global mouse_released
+    screen.blit(boss_bg_imgs[bossn], (0, 0))
+    textos_dos_bosses = ["Você acorda sem muito saber o que aconteceu, olha ao redor e percebe que está em uma sala de aula comum, você olha para o quadro e percebe que o conteúdo de substantivos está sendo passado, o que torna impossível reconhecer se você está na sexta série ou no terceirão. Pouco tempo se passa até que alguém entra pela porta, um homem visivelmente mais velho que todos os alunos daquela classe, ele imediatamente começa a lhe encarar, uma aura começa a crescer ao redor dele(igual a dos dragões heroicos do dragon city), você percebe que ele é o primeiro boss e a batalha começa.","Você acorda com as mãos atrás das costas e algemado, dois homens altos e uniformizados estão te acompanhando ao seu lado, você está no que parece ser uma casa chique e antiga, com decorações e entalhes de madeira envernizada na parede, você se pergunta aonde estão te levando, vocês param em frente a uma grande porta de madeira, que se abre sozinha, revelando um grande salão, você analisa o local por alguns segundos e percebe que está em um júri, e que o réu é você. Logo ao entrar você percebe alguém que se destaca em meio a todos, um advogado, de terno e com cabelo alisado. Pouco depois esse homem aponta para você se e percebe que ele é o segundo boss. Uma aura (igual a de super sayajin) cresce ao redor dele e a segunda batalha começa.","Voce acorda novamente, desta vez em uma cadeira extremamente desconfortável, na sua frente uma mesa inclinada -“Quem foi o idiota que fez uma mesa inclinada?” você se pergunta. Olha ao seu redor e percebe que está totalmente sozinho em uma sala de aula do IFSC, com somente a sua carteira. Na sua frente, você vê um papel com o título “Recuperação de Portugues”. “O que está acontecendo?” Você se pergunta, mas antes mesmo de poder fazer hipóteses uma professora entra pela porta da sala, nada mais nada menos que Ivelã Pereira.Ivela para na sua frente e uma aura igual a de Michael Jordan cresce ao redor dela, a batalha final começa."]
+    texto = textos_dos_bosses[bossn]
+
+    # Quebra o texto em várias linhas se for muito longo
+    def wrap_text(text, font, max_width):
+        words = text.split(' ')
+        lines = []
+        current_line = ""
+        for word in words:
+            test_line = current_line + word + " "
+            if font.size(test_line)[0] > max_width:
+                lines.append(current_line)
+                current_line = word + " "
+            else:
+                current_line = test_line
+        lines.append(current_line)
+        return lines
+
+    linhas = wrap_text(texto, font_medium, 700)  # 700 é a largura máxima da caixa de texto
+
+    y = HEIGHT // 2 - (len(linhas) * 20)
+    for linha in linhas:
+        draw_text(linha.strip(), font_medium, BLACK, WIDTH//2, y, True)
         y += 40
 
     # O botão é sempre desenhado
@@ -641,7 +812,12 @@ while running:
             context_paragraph += 1
             if context_paragraph >= len(context_texts):
                 context_paragraph = 0
-                game_state = "battle"
+                game_state = "boss_context"
+
+    elif game_state == "boss_context":
+        if draw_context_boss(current_boss):
+            game_state = "battle"
+
     
     elif game_state == "battle":
         action = draw_battle_screen()
@@ -668,7 +844,7 @@ while running:
             if current_boss < len(bosses) - 1:
                 current_boss += 1
                 context_paragraph = 0  # Reinicia o contexto para o próximo boss
-                game_state = "context"
+                game_state = "boss_context"
                 boss_attacks_this_turn = []
                 player_attacks_this_turn = []
                 attack_description = ""
